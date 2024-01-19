@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+
+	}
+
+	html {
+		background-color: darkgreen;
+	}
+
+	span {
+		font-size: 500%;
+		color: brown;
+		background-color: antiquewhite;
+		border: 1px solid black;
+		min-width: 100px;
+		max-width: 100px;
+		min-height: 100px;
+		max-height: 100px;
+	}
+
+	.info {
+		font-size: 250%;
+		background-color: darkgreen;
+		color: yellow;
+	}
+
+	button {
+		background-color: rgb(100, 200, 100);
+		color: black;
+		width: 50%;
+		padding: 10px;
+		font-size: 300%;
+		border: none;
+		border-radius: 10px;
+		font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	}
+</style>
+
+<body>
+	<center>
+		<h1 id="info" class="info"></h1><br>
+		<span id="1">0</span>
+		<span id="2">0</span>
+		<span id="3">0</span><br>
+		<button id="girar">Girar</button>
+	</center>
+</body>
+<script>
+
+
+	const um = document.getElementById('1');
+	const dois = document.getElementById('2');
+	const tres = document.getElementById('3');
+	const girar = document.getElementById('girar');
+	const info = document.getElementById('info');
+
+
+
+	var numeros = [
+		'&#127775',
+		'&#128522',
+		'&#127829',
+		'&#128640',
+		'&#127881',
+		'&#128049',
+		'&#127752',
+		'&#127928',
+		'&#128150',
+		'&#127769',
+		'&#127908',
+		'&#127864',
+		'&#127873',
+		'&#127757',
+		'&#127929',
+		'&#128048',
+		'&#128075'];
+
+	um.innerHTML = numeros[NumeroAleatorio(0, numeros.length - 1)];
+	dois.innerHTML = numeros[NumeroAleatorio(0, numeros.length - 1)];
+	tres.innerHTML = numeros[NumeroAleatorio(0, numeros.length - 1)];
+
+	var creditos = 100;
+	info.textContent = 'Creditos: R$ ' + creditos + '.00';
+
+	//probabilidades iniciais
+	var umin_ = 0;
+	var dmin_ = 0;
+	var tmin_ = 0;
+	var umax_ = numeros.length - 1;
+	var dmax_ = numeros.length - 1;
+	var tmax_ = numeros.length - 1;
+	//--------------
+
+	function NumeroAleatorio(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	let loop;
+	let loopChecks = false;
+	var vel = 1;
+
+	girar.addEventListener('click', () => {
+		umin_ = 0;//numero minimo da jogada
+		dmin_ = 0;//numero minimo da jogada
+		tmin_ = 0;//numero minimo da jogada
+		umax_ = numeros.length - 1;//numero maximo da jogada
+		dmax_ = numeros.length - 1;//numero maximo da jogada
+		tmax_ = numeros.length - 1;//numero maximo da jogada
+		loop = setInterval(() => {
+			bbbb(umin_, dmin_, tmin_, umax_, dmax_, tmax_)
+		}, vel);
+
+		creditos -= 10;
+
+		if (loopChecks === false) {
+			iniciarLoop();
+			loopChecks = true;
+		}
+	});
+
+
+
+
+	function bbbb(
+		uMin = 0,
+		dMin = 0,
+		tMin = 0,
+		uMax = numeros.length - 1,
+		dMax = numeros.length - 1,
+		tMax = numeros.length - 1
+	) {
+		um.innerHTML = numeros[NumeroAleatorio(0, numeros.length - 1)];
+		dois.innerHTML = numeros[NumeroAleatorio(0, numeros.length - 1)];
+		tres.innerHTML = numeros[NumeroAleatorio(0, numeros.length - 1)];
+
+		//console.log(vel)
+		vel += 1;
+		if (vel === 50) {
+			//ultima jogada
+			um.innerHTML = numeros[NumeroAleatorio(uMin, uMax)];
+			dois.innerHTML = numeros[NumeroAleatorio(dMin, dMax)];
+			tres.innerHTML = numeros[NumeroAleatorio(tMin, tMax)];
+			//-------------
+			clearInterval(loop);
+			vel = 1;
+		}
+		else {
+			clearInterval(loop);
+			loop = setInterval(() => {
+				bbbb(umin_, dmin_, tmin_, umax_, dmax_, tmax_)
+			}, vel);
+		}
+	}
+
+
+	function iniciarLoop() {
+		setInterval(() => {
+
+			info.textContent = 'Creditos: R$ ' + creditos + '.00';
+
+			if (loopChecks) {
+
+				var texto_um = document.getElementById('1').textContent;
+				var texto_dois = document.getElementById('2').textContent;
+				var texto_tres = document.getElementById('3').textContent;
+				//if (texto_um === '0') {
+				//	if (texto_dois === '0') {
+				//		if (texto_tres === '0') {
+				//			info.textContent = 'Acertou!';
+				//			creditos += 100;
+				//			loopChecks = false;
+				//		}
+				//	}
+				//}
+
+				if (texto_um === texto_dois && texto_um === texto_tres) {
+					info.textContent = 'Acertou!';
+					creditos *= 2;
+					loopChecks = false;
+					vel = 1;
+				}
+			}
+
+		}, 100);
+	}
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+</html>
